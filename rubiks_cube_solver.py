@@ -4,7 +4,9 @@ from time import time
 def distance(cube, phase):
     if phase == 0:
         idxes = cube.idx_phase0()
-        return max(prunning[phase][i][idxes[i]] for i in range(prunning_num[phase]))
+    else:
+        idxes = cube.idx_phase1()
+    return max(prunning[phase][i][idxes[i]] for i in range(prunning_num[phase]))
 
 def phase_search(phase, puzzle, depth):
     global path
@@ -27,7 +29,7 @@ def phase_search(phase, puzzle, depth):
 def solver(puzzle):
     global solution, path
     solution = []
-    for phase in range(1):
+    for phase in range(2):
         print('phase', phase, 'depth', end=' ',flush=True)
         strt = time()
         for depth in range(20):
@@ -44,9 +46,9 @@ def solver(puzzle):
                 print(time() - strt, 'sec')
                 break
 
-prunning_num = [2, 1]
+prunning_num = [2, 2]
 prunning = [[[] for _ in range(prunning_num[i])] for i in range(2)]
-for phase in range(1):
+for phase in range(2):
     for i in range(prunning_num[phase]):
         with open('prunning_phase' + str(phase) + '_' + str(i) + '.csv', mode='r') as f:
             prunning[phase][i] = [int(i) for i in f.readline().replace('\n', '').split(',')]
@@ -54,6 +56,7 @@ for phase in range(1):
 
 successor = [
     [0,    2, 3,    5, 6, 7, 8, 9, 10, 11, 12,     14, 15,     17],
+    [   1,       4,    6, 7, 8, 9, 10, 11,     13,         16    ]
 ]
 move_candidate = ["R", "R2", "R'", "L", "L2", "L'", "U", "U2", "U'", "D", "D2", "D'", "F", "F2", "F'", "B", "B2", "B'"]
 solution = []
@@ -62,8 +65,10 @@ scarmble = [move_candidate.index(i) for i in input('scramble: ').split()]
 puzzle = Cube()
 for i in scarmble:
     puzzle = puzzle.move(i)
+strt = time()
 solver(puzzle)
 print('solution:', end=' ')
 for i in solution:
     print(move_candidate[i], end=' ')
 print('')
+print('time:', time() - strt)

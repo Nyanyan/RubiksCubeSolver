@@ -7,6 +7,7 @@ move_candidate = ["R", "R2", "R'", "L", "L2", "L'", "U", "U2", "U'", "D", "D2", 
 
 successor = [
     [0,    2, 3,    5, 6, 7, 8, 9, 10, 11, 12,     14, 15,     17],
+    [   1,       4,    6, 7, 8, 9, 10, 11,     13,         16    ]
 ]
 
 solved = Cube()
@@ -57,6 +58,51 @@ with open('prunning_phase0_1.csv', mode='w') as f:
 '''
 
 
+
+print('phase1 CP')
+prunning = [99 for _ in range(40320)]
+que = deque([[solved, 0, -10, -10]])
+prunning[solved.idx_phase1()[0]] = 0
+cnt = 0
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle, num, l_twist, ll_twist = que.popleft()
+    for twist in successor[1]:
+        if face(twist) == face(l_twist) or axis(twist) == axis(l_twist) == axis(ll_twist):
+            continue
+        n_puzzle = puzzle.move(twist)
+        idx = n_puzzle.idx_phase1()[0]
+        if prunning[idx] > num + 1:
+            prunning[idx] = num + 1
+            que.append([n_puzzle, num + 1, twist, l_twist])
+with open('prunning_phase1_0.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    writer.writerow(prunning)
+
+
+print('phase1 EP')
+prunning = [99 for _ in range(967680)]
+que = deque([[solved, 0, -10, -10]])
+prunning[solved.idx_phase1()[1]] = 0
+cnt = 0
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle, num, l_twist, ll_twist = que.popleft()
+    for twist in successor[1]:
+        if face(twist) == face(l_twist) or axis(twist) == axis(l_twist) == axis(ll_twist):
+            continue
+        n_puzzle = puzzle.move(twist)
+        idx = n_puzzle.idx_phase1()[1]
+        if prunning[idx] > num + 1:
+            prunning[idx] = num + 1
+            que.append([n_puzzle, num + 1, twist, l_twist])
+with open('prunning_phase1_1.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    writer.writerow(prunning)
 
 
 ''' ボツ

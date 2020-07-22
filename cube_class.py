@@ -117,7 +117,35 @@ class Cube:
             res_eo *= 2
             res_eo += self.Eo[i]
         return res_co, res_ep + res_eo * 495
-
+    
+    def idx_phase1(self):
+        res_cp = 0
+        for i in range(8):
+            cnt = self.Cp[i]
+            for j in self.Cp[:i]:
+                if j < self.Cp[i]:
+                    cnt -= 1
+            res_cp += fac[7 - i] * cnt
+        res_ep_ud = 0
+        arr_ep_ud = [self.Ep[i] for i in [0, 1, 2, 3, 8, 9, 10, 11]]
+        for i in range(8):
+            if arr_ep_ud[i] > 3:
+                arr_ep_ud[i] -= 4
+        for i in range(8):
+            cnt = arr_ep_ud[i]
+            for j in arr_ep_ud[:i]:
+                if j < arr_ep_ud[i]:
+                    cnt -= 1
+            res_ep_ud += fac[7 - i] * cnt
+        res_ep_fbrl = 0
+        arr_ep_fbrl = [self.Ep[i] - 4 for i in [4, 5, 6, 7]]
+        for i in range(4):
+            cnt = arr_ep_fbrl[i]
+            for j in arr_ep_fbrl[:i]:
+                if j < arr_ep_fbrl[i]:
+                    cnt -= 1
+            res_ep_fbrl += fac[3 - i] * cnt
+        return res_cp, res_ep_ud * 24 + res_ep_fbrl
 def face(twist):
     return twist // 3
 
