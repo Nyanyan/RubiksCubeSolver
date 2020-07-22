@@ -71,4 +71,5 @@ print('solution:', end=' ')
 for i in solution:
     print(move_candidate[i], end=' ')
 print('')
-print('time:', time() - strt)
+print(len(solution), 'moves')
+print('time:', time() - strt, 'sec')

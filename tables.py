@@ -11,6 +11,143 @@ successor = [
 ]
 
 solved = Cube()
+
+'''
+cp_move = [[-1 for _ in range(18)] for _ in range(40320)]
+que = deque([solved])
+cnt = 0
+print('CP move index')
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle = que.popleft()
+    idx = puzzle.idx_cp()
+    if cp_move[idx][0] == -1:
+        for twist in range(18):
+            n_puzzle = puzzle.move(twist)
+            n_idx = n_puzzle.idx_cp()
+            cp_move[idx][twist] = n_idx
+            que.append(n_puzzle)
+with open('move_cp.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    for arr in cp_move:
+        writer.writerow(arr)
+
+
+co_move = [[-1 for _ in range(18)] for _ in range(2187)]
+que = deque([solved])
+cnt = 0
+print('CO move index')
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle = que.popleft()
+    idx = puzzle.idx_co()
+    if co_move[idx][0] == -1:
+        for twist in range(18):
+            n_puzzle = puzzle.move(twist)
+            n_idx = n_puzzle.idx_co()
+            co_move[idx][twist] = n_idx
+            que.append(n_puzzle)
+with open('move_co.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    for arr in co_move:
+        writer.writerow(arr)
+
+
+ep_phase0 = [[-1 for _ in range(18)] for _ in range(495)]
+que = deque([solved])
+cnt = 0
+print('EP move index for phase 0')
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle = que.popleft()
+    idx = puzzle.idx_phase0_ep()
+    if ep_phase0[idx][0] == -1:
+        for twist in range(18):
+            n_puzzle = puzzle.move(twist)
+            n_idx = n_puzzle.idx_phase0_ep()
+            ep_phase0[idx][twist] = n_idx
+            que.append(n_puzzle)
+with open('move_ep_phase0.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    for arr in ep_phase0:
+        writer.writerow(arr)
+
+
+eo_phase0 = [[-1 for _ in range(18)] for _ in range(2048)]
+que = deque([solved])
+cnt = 0
+print('EO move index for phase 0')
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle = que.popleft()
+    idx = puzzle.idx_phase0_eo()
+    if eo_phase0[idx][0] == -1:
+        for twist in range(18):
+            n_puzzle = puzzle.move(twist)
+            n_idx = n_puzzle.idx_phase0_eo()
+            eo_phase0[idx][twist] = n_idx
+            que.append(n_puzzle)
+with open('move_eo_phase0.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    for arr in eo_phase0:
+        writer.writerow(arr)
+
+
+ep_ud_phase1 = [[-1 for _ in range(18)] for _ in range(40320)]
+que = deque([solved])
+cnt = 0
+print('EP UD move index for phase 1')
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle = que.popleft()
+    idx = puzzle.idx_phase1_ep_ud()
+    if ep_ud_phase1[idx][1] == -1:
+        for twist in successor[1]:
+            n_puzzle = puzzle.move(twist)
+            n_idx = n_puzzle.idx_phase1_ep_ud()
+            ep_ud_phase1[idx][twist] = n_idx
+            que.append(n_puzzle)
+with open('move_ep_ud_phase1.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    for arr in ep_ud_phase1:
+        writer.writerow(arr)
+
+
+ep_fbrl_phase1 = [[-1 for _ in range(18)] for _ in range(24)]
+que = deque([solved])
+cnt = 0
+print('EP FBRL move index for phase 1')
+while que:
+    cnt += 1
+    if cnt % 10000 == 0:
+        print(cnt, len(que))
+    puzzle = que.popleft()
+    idx = puzzle.idx_phase1_ep_fbrl()
+    if ep_fbrl_phase1[idx][1] == -1:
+        for twist in successor[1]:
+            n_puzzle = puzzle.move(twist)
+            n_idx = n_puzzle.idx_phase1_ep_fbrl()
+            ep_fbrl_phase1[idx][twist] = n_idx
+            que.append(n_puzzle)
+with open('move_ep_fbrl_phase1.csv', mode='w') as f:
+    writer = csv.writer(f, lineterminator='\n')
+    for arr in ep_fbrl_phase1:
+        writer.writerow(arr)
+'''
+
+
+
+
 '''
 print('phase0 CO')
 prunning = [99 for _ in range(2187)]
@@ -58,7 +195,7 @@ with open('prunning_phase0_1.csv', mode='w') as f:
 '''
 
 
-
+'''
 print('phase1 CP')
 prunning = [99 for _ in range(40320)]
 que = deque([[solved, 0, -10, -10]])
@@ -103,7 +240,7 @@ while que:
 with open('prunning_phase1_1.csv', mode='w') as f:
     writer = csv.writer(f, lineterminator='\n')
     writer.writerow(prunning)
-
+'''
 
 ''' ボツ
 print('phase0 EP')
