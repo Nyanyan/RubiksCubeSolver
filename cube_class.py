@@ -115,24 +115,41 @@ class Cube:
             res *= 3
             res += self.Co[i]
         return res
-    
-    '''
-    def idx_ep(self, twist):
-        parts = [[0, 2, 8, 10], [4, 5, 6, 7], [3, 1, 9, 11]]
-        res_arr = [0 for _ in range(3)]
-        for parts_idx in range(3):
-            res = 0
-            arr = [self.Ep[i] for i in parts[parts_idx]]
-            for i in range(4):
-                cnt = arr[i]
-                for j in arr[:i]:
-                    if j < arr[i]:
-                        cnt -= 1
-                res += fac[3 - i] * cnt * cmb(11 - i, 3 - i)
-            res_arr[parts_idx] = res
-        return res_arr
-    '''
 
+    def idx_ep(self):
+        mse_parts = [[2, 0, 10, 8], [3, 1, 9, 11], [4, 5, 6, 7]]
+        arr = [[-1 for _ in range(4)] for _ in range(3)]
+        for i in range(12):
+            for mse in range(3):
+                if self.Ep[i] in mse_parts[mse]:
+                    arr[mse][mse_parts[mse].index(self.Ep[i])] = i
+        #print(arr)
+        res = [-1 for _ in range(3)]
+        for mse in range(3):
+            tmp = 0
+            for i in range(4):
+                cnt = arr[mse][i]
+                for j in arr[mse][:i]:
+                    if j < arr[mse][i]:
+                        cnt -= 1
+                tmp += cnt * cmb(11 - i, 3 - i) * fac[3 - i]
+            res[mse] = tmp
+        return res
+    
+    def idx_eo(self):
+        res_eo = 0
+        for i in range(11):
+            res_eo *= 2
+            res_eo += self.Eo[i]
+        return res_eo
+    
+    def solved_ep_phase0(self):
+        for i in range(4, 8):
+            if not self.Ep[i] in {4, 5, 6, 7}:
+                return False
+        return True
+
+    '''
     def idx_phase0_ep(self):
         res_ep = 0
         cnt = 0
@@ -175,8 +192,8 @@ class Cube:
                     cnt -= 1
             res_ep_fbrl += fac[3 - i] * cnt
         return res_ep_fbrl
-
-
+    '''
+    '''
     def idx_phase0(self):
         res_co = 0
         for i in range(7):
@@ -224,6 +241,7 @@ class Cube:
                     cnt -= 1
             res_ep_fbrl += fac[3 - i] * cnt
         return res_cp, res_ep_ud * 24 + res_ep_fbrl
+    '''
 def face(twist):
     return twist // 3
 
